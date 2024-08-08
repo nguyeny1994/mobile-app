@@ -50,9 +50,10 @@ jobs:
           curl https://sdk.cloud.google.com | bash > /dev/null
           source $HOME/google-cloud-sdk/path.bash.inc
           gcloud components update
-      - name: Decode Google Credentials
-      
-        run: printf "%s" "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > $HOME/google-credentials.json
+      - name: Set up Google Application Credentials
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
       - name: Authenticate with Google Cloud
 
         run: |
