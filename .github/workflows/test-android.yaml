@@ -24,7 +24,7 @@ jobs:
   
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.0' # Thay đổi phiên bản Flutter nếu cần
+          flutter-version: '3.16.9' # Thay đổi phiên bản Flutter nếu cần
   
       - name: Install dependencies
   
