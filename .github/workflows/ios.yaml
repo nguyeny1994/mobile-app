@@ -1,0 +1,113 @@
+name: "Flutter iOS CI"
+
+on:
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: "Manual trigger for deploying iOS flutter"
+        required: true
+        default: "true"
+jobs:
+  build:
+    name: "Build"
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+  
+        uses: actions/checkout@v2
+  
+      - name: Set up JDK 11
+
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt' #AdoptOpenJDK
+          java-version: '11'
+      -  name: Install Flutter
+         run: |
+           java -version
+           brew install --cask flutter
+           export PATH="$PATH:`flutter/bin/flutter`"
+           flutter doctor
+  
+      - name: Install dependencies
+  
+        run: flutter pub get
+      - name: Install Firebase CLI
+
+        run: npm install -g firebase-tools
+      # - name: Login Firebase
+
+      #   run: firebase login
+  
+      - name: Build APK
+  
+        run: run: flutter build ios --release --no-codesign
+    
+      # - name: Upload APK to Firebase App Distribution
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #   run: |
+      #     firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+      #     --app ${{ secrets.FIREBASE_APP_ID }} \
+      #     --groups testers
+        
+      
+      - name: Set up Google Application Credentials
+        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      # - name: Upload Artifact to Firebase App Distribution
+      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
+      #   with:
+      #     appId: ${{ secrets.FIREBASE_APP_ID }}
+      #     serviceCredentialsFileContent: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      #     groups: testers
+      #     file: build/app/outputs/flutter-apk/app-release.apk
+      - name: Upload Artifact to Firebase App Distribution
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
+        run: |
+          curl -X POST \
+          -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+          -F "file=@build/app/outputs/flutter-apk/app-release.apk" \
+          -F "appId=${{ secrets.FIREBASE_APP_ID }}" \
+          -F "groups=testers" \
+          "https://firebaseappdistribution.googleapis.com/v1alpha/apps/${{ secrets.FIREBASE_APP_ID }}/releases"
+  # -F "file=@build/ios/ipa/Runner.ipa" \
+      # - name: Upload artifact to Firebase App Distribution
+
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
+      #   run: |
+      #       cat $HOME/google-credentials.json
+      #       firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+      #       --app ${{ secrets.FIREBASE_APP_ID }} \
+      #       --groups testers
+      # - name: Upload APK to Firebase App Distribution
+
+      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
+      #   with:
+      #     appId: ${{ secrets.FIREBASE_APP_ID }}
+      #     token: ${{ secrets.FIREBASE_TOKEN }}
+      #     groups: testers
+      #     file: build/app/outputs/flutter-apk/app-release.apk
+      # - name: Build iOS
+  
+      #   run: flutter build ios --release
+      #   env:
+      #     CI: true
+  
+      # - name: Upload APK
+  
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: android-apk
+      #     path: build/app/outputs/flutter-apk/app-release.apk
+  
+      # - name: Upload iOS build
+  
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: ios-build
+      #     path: build/ios/ipa/*.ipa
