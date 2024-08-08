@@ -73,7 +73,8 @@ jobs:
         run: |
           curl -X POST \
           -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
-          -F "file=@build/ios/ipa/Runner.ipa" \
+          -F "file=@build/app/outputs/flutter-apk/app-release.apk" \
+  # -F "file=@build/ios/ipa/Runner.ipa" \
           -F "appId=${{ secrets.FIREBASE_APP_ID }}" \
           -F "groups=testers" \
           "https://firebaseappdistribution.googleapis.com/v1alpha/apps/${{ secrets.FIREBASE_APP_ID }}/releases"
