@@ -52,7 +52,7 @@ jobs:
           gcloud components update
       - name: Decode Google Credentials
       
-        run: echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | base64 --decode > $HOME/google-credentials.json
+        run: printf "%s" "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > $HOME/google-credentials.json
       - name: Authenticate with Google Cloud
 
         run: |
