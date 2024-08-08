@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "211797780547",
+    "project_id": "thanhnvn-1518c",
+    "storage_bucket": "thanhnvn-1518c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211797780547:android:82a72801eace22d807ccf6",
+        "android_client_info": {
+          "package_name": "test.thanhnvn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6Re3IxCnflIOK8j2ArQP9p8Ob-9iYsuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
