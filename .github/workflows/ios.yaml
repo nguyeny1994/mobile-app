@@ -45,7 +45,7 @@ jobs:
         run:
           flutter build ios --release --no-codesign
       - name: Create ExportOption.plist
-        run: echo "${{ secrets.test }}" > ios/ExportOption.plist
+        run: echo "${{ secrets.test }}" > ios/ExportOptions.plist
         env:
           test: ${{ secrets.test }}
       - name: Create .ipa file
