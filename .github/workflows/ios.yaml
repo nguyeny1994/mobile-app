@@ -44,41 +44,61 @@ jobs:
   
         run:
           flutter build ios --release --no-codesign
-      - name: Install Google Cloud SDK
-    
+
+      - name: Create .ipa file
+
         run: |
-          curl https://sdk.cloud.google.com | bash > /dev/null
-          source $HOME/google-cloud-sdk/path.bash.inc
-          gcloud components update
+          xcodebuild -exportArchive \
+          -archivePath build/ios/archive/Runner.xcarchive \
+          -exportOptionsPlist ios/ExportOptions.plist \
+          -exportPath build/ios/ipa
       - name: Set up Google Application Credentials
         run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      - name: Authenticate with Google Cloud
-
-        run: |
-          gcloud auth activate-service-account --key-file=$HOME/google-credentials.json
-          gcloud config set project your-project-id
-      - name: Upload Artifact to Firebase App Distribution
+      - name: Upload artifact to Firebase App Distribution
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
         run: |
-          curl -X POST \
-          -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
-          -F "file=@build/ios/ipa/Runner.ipa" \
-          -F "appId=${{ secrets.FIREBASE_APP_ID }}" \
-          -F "groups=testers" \
-          "https://firebaseappdistribution.googleapis.com/v1alpha/apps/${{ secrets.FIREBASE_APP_ID }}/releases"
-  # 
-      # - name: Upload artifact to Firebase App Distribution
+            cat $HOME/google-credentials.json
+            firebase appdistribution:distribute build/app/outputs/flutter-apk/build/ios/ipa/Runner.ipa \
+            --app ${{ secrets.FIREBASE_APP_ID }} \
+            --groups testers
+  #     - name: Install Google Cloud SDK
+    
+  #       run: |
+  #         curl https://sdk.cloud.google.com | bash > /dev/null
+  #         source $HOME/google-cloud-sdk/path.bash.inc
+  #         gcloud components update
+  #     - name: Set up Google Application Credentials
+  #       run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
+  #       env:
+  #         GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+  #     # - name: Authenticate with Google Cloud
 
-      #   env:
-      #     GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
-      #   run: |
-      #       cat $HOME/google-credentials.json
-      #       firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
-      #       --app ${{ secrets.FIREBASE_APP_ID }} \
-      #       --groups testers
+  #     #   run: |
+  #     #     gcloud auth activate-service-account --key-file=$HOME/google-credentials.json
+  #     #     gcloud config set project your-project-id
+  #     # - name: Upload Artifact to Firebase App Distribution
+  #     #   env:
+  #     #     GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
+  #     #   run: |
+  #     #     curl -X POST \
+  #     #     -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+  #     #     -F "file=@build/ios/ipa/Runner.ipa" \
+  #     #     -F "appId=${{ secrets.FIREBASE_APP_ID }}" \
+  #     #     -F "groups=testers" \
+  #     #     "https://firebaseappdistribution.googleapis.com/v1alpha/apps/${{ secrets.FIREBASE_APP_ID }}/releases"
+  # # 
+  #     - name: Upload artifact to Firebase App Distribution
+
+  #       env:
+  #         GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
+  #       run: |
+  #           cat $HOME/google-credentials.json
+  #           firebase appdistribution:distribute build/ios/iphoneos/Runner.app \
+  #           --app ${{ secrets.FIREBASE_APP_ID }} \
+  #           --groups testers
       # - name: Upload APK to Firebase App Distribution
 
       #   uses: wzieba/Firebase-Distribution-Github-Action@v1
