@@ -48,34 +48,35 @@ jobs:
         run: flutter build apk --release
     
       
-      # - name: Upload APK to Firebase App Distribution
-
-      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
-      #   with:
-      #     appId: ${{ secrets.FIREBASE_APP_ID }}
-      #     token: ${{ secrets.FIREBASE_TOKEN }}
-      #     groups: testers
-      #     file: build/app/outputs/flutter-apk/app-release.apk
-      - name: Set up Google Application Credentials
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
-      - name: Upload artifact to Firebase App Distribution
-
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
-        run: |
-          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
-          --app ${{ secrets.FIREBASE_APP_ID }} \
-          --groups testers
-      # - name: Upload APK to Firebase App Distribution
+      
+      # - name: Set up Google Application Credentials
+      #   run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
       #   env:
-      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #     GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      # - name: Upload artifact to Firebase App Distribution
+
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
       #   run: |
       #     firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
       #     --app ${{ secrets.FIREBASE_APP_ID }} \
       #     --groups testers
+      - name: Upload APK to Firebase App Distribution
+
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: testers
+          file: build/app/outputs/flutter-apk/app-release.apk
+      - name: Upload APK to Firebase App Distribution
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+          --app ${{ secrets.FIREBASE_APP_ID }} \
+          --groups testers
   
       # - name: Build iOS
   
