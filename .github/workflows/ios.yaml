@@ -44,13 +44,13 @@ jobs:
   
         run:
           flutter build ios --release --no-codesign
-      - name: Create ExportOption.plist
-        run: echo "${{ secrets.test }}" > ios/ExportOptions.plist
-        env:
-          test: ${{ secrets.test }}
-      - name: Create .ipa file using xcrun
-        run: |
-          xcrun -sdk iphoneos PackageApplication -v build/ios/iphoneos/Runner.app -o $PWD/build/ios/ipa/Runnert-xcrun.ipa
+      # - name: Create ExportOption.plist
+      #   run: echo "${{ secrets.test }}" > ios/ExportOptions.plist
+      #   env:
+      #     test: ${{ secrets.test }}
+      # - name: Create .ipa file using xcrun
+      #   run: |
+      #     xcrun -sdk iphoneos PackageApplication -v build/ios/iphoneos/Runner.app -o $PWD/build/ios/ipa/Runnert-xcrun.ipa
       - name: Archive iOS
 
         run: |
@@ -66,7 +66,7 @@ jobs:
           -archivePath build/ios/archive/Runner.xcarchive \
           -exportOptionsPlist ios/ExportOptions.plist \
           -exportPath build/ios/ipa
-      
+      # fastlane deliver --ipa build/ios/ipa/Runner.ipa --username "your-apple-id"
       - name: Set up Google Application Credentials
         run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
         env:
