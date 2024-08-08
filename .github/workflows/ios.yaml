@@ -55,6 +55,7 @@ jobs:
 
         run: |
           xcodebuild archive \
+          -workspace ios/Runner.xcworkspace \
           -scheme Runner \
           -archivePath build/ios/archive/Runner.xcarchive \
           -sdk iphoneos \
