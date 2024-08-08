@@ -44,7 +44,10 @@ jobs:
   
         run:
           flutter build ios --release --no-codesign
-
+      - name: Create ExportOption.plist
+        run: echo "${{ secrets.test }}" > ios/ExportOption.plist
+        env:
+          test: ${{ secrets.test }}
       - name: Create .ipa file
 
         run: |
@@ -52,6 +55,7 @@ jobs:
           -archivePath build/ios/archive/Runner.xcarchive \
           -exportOptionsPlist ios/ExportOptions.plist \
           -exportPath build/ios/ipa
+      
       - name: Set up Google Application Credentials
         run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
         env:
