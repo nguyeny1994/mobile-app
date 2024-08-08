@@ -39,9 +39,9 @@ jobs:
       - name: Install Firebase CLI
 
         run: npm install -g firebase-tools
-      - name: Login Firebase
+      # - name: Login Firebase
 
-        run: firebase login
+      #   run: firebase login
   
       - name: Build APK
   
