@@ -1,0 +1,55 @@
+name: "Flutter CI"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: "Manual trigger for deploying auth-microservice"
+        required: true
+        default: "true"
+jobs:
+  build:
+    name: "Build"
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+  
+        uses: actions/checkout@v2
+  
+      - name: Set up Flutter
+  
+        uses: subosito/flutter-action@v2
+        with:
+        flutter-version: '3.0.0' # Thay đổi phiên bản Flutter nếu cần
+  
+      - name: Install dependencies
+  
+        run: flutter pub get
+  
+      - name: Build APK
+  
+        run: flutter build apk --release
+  
+      # - name: Build iOS
+  
+      #   run: flutter build ios --release
+      #   env:
+      #     CI: true
+  
+      # - name: Upload APK
+  
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: android-apk
+      #     path: build/app/outputs/flutter-apk/app-release.apk
+  
+      # - name: Upload iOS build
+  
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: ios-build
+      #     path: build/ios/ipa/*.ipa
