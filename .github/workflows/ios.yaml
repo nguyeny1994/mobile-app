@@ -48,8 +48,19 @@ jobs:
         run: echo "${{ secrets.test }}" > ios/ExportOptions.plist
         env:
           test: ${{ secrets.test }}
-      - name: Create .ipa file
+      - name: Create .ipa file using xcrun
+        run: |
+          xcrun -sdk iphoneos PackageApplication -v build/ios/iphoneos/Runner.app -o $PWD/build/ios/ipa/Runnert-xcrun.ipa
+      - name: Archive iOS
 
+        run: |
+          xcodebuild archive \
+          -scheme Runner \
+          -archivePath build/ios/archive/Runner.xcarchive \
+          -sdk iphoneos \
+          -configuration Release \
+          -allowProvisioningUpdates
+      - name: Create .ipa file
         run: |
           xcodebuild -exportArchive \
           -archivePath build/ios/archive/Runner.xcarchive \
