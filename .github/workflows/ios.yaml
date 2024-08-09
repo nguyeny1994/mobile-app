@@ -44,87 +44,87 @@ jobs:
 
       #   run: firebase login
   
-      - name: Build APK
+      # - name: Build APK
   
-        run:
-          flutter build ios --release --no-codesign
-      - name: Set up keychain
-        run: |
-          security create-keychain -p "" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security set-keychain-settings -t 3600 -u build.keychain
-          echo ${{ secrets.APPLE_CERTIFICATE }} | base64 --decode > certificate.p12
-          security import certificate.p12 -k build.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-        env:
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+      #   run:
+      #     flutter build ios --release --no-codesign
+      # - name: Set up keychain
+      #   run: |
+      #     security create-keychain -p "" build.keychain
+      #     security default-keychain -s build.keychain
+      #     security unlock-keychain -p "" build.keychain
+      #     security set-keychain-settings -t 3600 -u build.keychain
+      #     echo ${{ secrets.APPLE_CERTIFICATE }} | base64 --decode > certificate.p12
+      #     security import certificate.p12 -k build.keychain -P ${{ secrets.CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
+      #     security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+      #   env:
+      #     CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
-      - name: Set up provisioning profile
+      # - name: Set up provisioning profile
 
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo ${{ secrets.PROVISIONING_PROFILE }} | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+      #   run: |
+      #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+      #     echo ${{ secrets.PROVISIONING_PROFILE }} | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
-      - name: Archive iOS
+      # - name: Archive iOS
 
-        run: |
-          xcodebuild archive \
-          -workspace ios/Runner.xcworkspace \
-          -scheme Runner \
-          -archivePath build/ios/archive/Runner.xcarchive \
-          -sdk iphoneos \
-          -configuration Release \
-          -allowProvisioningUpdates
+      #   run: |
+      #     xcodebuild archive \
+      #     -workspace ios/Runner.xcworkspace \
+      #     -scheme Runner \
+      #     -archivePath build/ios/archive/Runner.xcarchive \
+      #     -sdk iphoneos \
+      #     -configuration Release \
+      #     -allowProvisioningUpdates
 
-      - name: Create .ipa file
+      # - name: Create .ipa file
 
-        run: |
-          xcodebuild -exportArchive \
-          -archivePath build/ios/archive/Runner.xcarchive \
-          -exportOptionsPlist ios/ExportOptions.plist \
-          -exportPath build/ios/ipa
+      #   run: |
+      #     xcodebuild -exportArchive \
+      #     -archivePath build/ios/archive/Runner.xcarchive \
+      #     -exportOptionsPlist ios/ExportOptions.plist \
+      #     -exportPath build/ios/ipa
 
-      - name: Upload Artifact to Firebase App Distribution
+      # - name: Upload Artifact to Firebase App Distribution
 
-        run: |
-          curl -X POST \
-          -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
-          -F "file=@build/ios/ipa/Runner.ipa" \
-          -F "appId=${{ secrets.FIREBASE_APP_ID }}" \
-          -F "groups=testers" \
-          "https://firebaseappdistribution.googleapis.com/v1alpha/apps/${{ secrets.FIREBASE_APP_ID }}/releases"
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
-      - name: Archive iOS
+      #   run: |
+      #     curl -X POST \
+      #     -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+      #     -F "file=@build/ios/ipa/Runner.ipa" \
+      #     -F "appId=${{ secrets.FIREBASE_APP_ID }}" \
+      #     -F "groups=testers" \
+      #     "https://firebaseappdistribution.googleapis.com/v1alpha/apps/${{ secrets.FIREBASE_APP_ID }}/releases"
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
+      # - name: Archive iOS
 
-        run: |
-          xcodebuild archive \
-          -workspace ios/Runner.xcworkspace \
-          -scheme Runner \
-          -archivePath build/ios/archive/Runner.xcarchive \
-          -sdk iphoneos \
-          -configuration Release \
-          -allowProvisioningUpdates
-      - name: Create .ipa file
-        run: |
-          xcodebuild -exportArchive \
-          -archivePath build/ios/archive/Runner.xcarchive \
-          -exportOptionsPlist ios/ExportOptions.plist \
-          -exportPath build/ios/ipa
-      # fastlane deliver --ipa build/ios/ipa/Runner.ipa --username "your-apple-id"
-      - name: Set up Google Application Credentials
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-      - name: Upload artifact to Firebase App Distribution
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
-        run: |
-            cat $HOME/google-credentials.json
-            firebase appdistribution:distribute build/app/outputs/flutter-apk/build/ios/ipa/Runner.ipa \
-            --app ${{ secrets.FIREBASE_APP_ID }} \
-            --groups testers
+      #   run: |
+      #     xcodebuild archive \
+      #     -workspace ios/Runner.xcworkspace \
+      #     -scheme Runner \
+      #     -archivePath build/ios/archive/Runner.xcarchive \
+      #     -sdk iphoneos \
+      #     -configuration Release \
+      #     -allowProvisioningUpdates
+      # - name: Create .ipa file
+      #   run: |
+      #     xcodebuild -exportArchive \
+      #     -archivePath build/ios/archive/Runner.xcarchive \
+      #     -exportOptionsPlist ios/ExportOptions.plist \
+      #     -exportPath build/ios/ipa
+      # # fastlane deliver --ipa build/ios/ipa/Runner.ipa --username "your-apple-id"
+      # - name: Set up Google Application Credentials
+      #   run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/google-credentials.json
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      # - name: Upload artifact to Firebase App Distribution
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: $HOME/google-credentials.json
+      #   run: |
+      #       cat $HOME/google-credentials.json
+      #       firebase appdistribution:distribute build/app/outputs/flutter-apk/build/ios/ipa/Runner.ipa \
+      #       --app ${{ secrets.FIREBASE_APP_ID }} \
+      #       --groups testers
       - name: build ipa file
         run: |
           flutter build ios --no-codesign
