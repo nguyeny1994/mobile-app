@@ -24,8 +24,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-      - name: Install 
-        run: bundle install
+      - name: Install
+        run: |
+          cd android/gradle/wrapper
+          bundle install
   
       - name: Set up JDK 11
 
