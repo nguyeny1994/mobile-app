@@ -19,14 +19,15 @@ jobs:
       - name: Checkout repository
   
         uses: actions/checkout@v2
-      - name: Set up Ruby
+      # - name: Set up Ruby
 
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: 2.7
       - name: Install
         run: |
           cd android
+          ls
           bundle install
   
       - name: Set up JDK 11
