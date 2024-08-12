@@ -51,9 +51,19 @@ jobs:
         # sed -i '' 's~{firebase_cli_token}~${{ secrets.FIREBASE_CLI_TOKEN }}~g' android/fastlane/Fastfile
         # cat android/fastlane/Fastfile
         # sed -i '' 's/{firebase_cli_token}/${{ secrets.FIREBASE_TOKEN }}/g' android/fastlane/Fastfile
+      -  name: Install Flutter
+         run: |
+           java -version
+           brew install --cask flutter
+           export PATH="$PATH:`flutter/bin/flutter`"
+           flutter doctor
+      - name: Install dependencies
+  
+        run: flutter pub get
       - name: Build APK
         run: |
           chmod -R 777 android
+          ls -la
           cd android
           pwd
           bundle exec fastlane android firebase_dev
