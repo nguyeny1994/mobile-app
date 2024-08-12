@@ -53,7 +53,7 @@ jobs:
       - name: Build APK
         run: |
           cd android
-          fastlane android firebase_dev
+          bundle exec fastlane android firebase_dev
         # bundle exec fastlane build
     
       - name: Upload APK to Firebase App Distribution
