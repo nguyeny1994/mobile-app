@@ -54,6 +54,7 @@ jobs:
       - name: Build APK
         run: |
           cd android
+          pwd
           bundle exec fastlane android firebase_dev
         # bundle exec fastlane build
     
