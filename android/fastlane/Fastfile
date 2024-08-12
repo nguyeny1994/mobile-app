@@ -4,7 +4,8 @@ platform :android do
 
   lane :firebase_dev do
     gradle(
-        task: "clean"
+        task: "clean",
+        project_dir: "android"
     )
 
     gradle(
@@ -12,6 +13,7 @@ platform :android do
         flavor: "dev",
         flags: '-Ptarget=lib/main_dev.dart',
         build_type: "Release",
+        project_dir: "android"
     )
 
     firebase_app_distribution(
@@ -25,7 +27,8 @@ platform :android do
 
   lane :firebase_uat do
       gradle(
-          task: "clean"
+          task: "clean",
+          project_dir: "android"
       )
 
       gradle(
@@ -33,6 +36,7 @@ platform :android do
           flavor: "uat",
           flags: '-Ptarget=lib/main_uat.dart',
           build_type: "Release",
+          project_dir: "android"
       )
 
     firebase_app_distribution(
