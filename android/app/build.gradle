@@ -59,10 +59,40 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            applicationId "com.nexlesoft.core"
+            dimension "default"
+            manifestPlaceholders = [applicationName: "@string/app_name"]
+            resValue "string", "app_name", "CODE BASE DEV"
+//            applicationIdSuffix ".dev"
+        }
+        stg {
+            applicationId "com.nexlesoft.core"
+            dimension "default"
+            manifestPlaceholders = [applicationName: "@string/app_name"]
+            resValue "string", "app_name", "CODE BASE STG"
+//            applicationIdSuffix ".stg"
+        }
+        prd {
+            applicationId "com.nexlesoft.core"
+            dimension "default"
+            manifestPlaceholders = [applicationName: "@string/app_name"]
+            resValue "string", "app_name", "CODE BASE"
+        }
+    }
+}
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'androidx.window:window-java:1.0.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+}
