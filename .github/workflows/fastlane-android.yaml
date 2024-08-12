@@ -37,8 +37,8 @@ jobs:
           distribution: 'adopt' #AdoptOpenJDK
           java-version: '11'
   
-      - name: CocoaPod Install
-        run: pod install
+      # - name: CocoaPod Install
+      #   run: pod install
       - name: Install Firebase CLI
 
         run: npm install -g firebase-tools
