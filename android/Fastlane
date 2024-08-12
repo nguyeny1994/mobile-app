@@ -1,0 +1,45 @@
+default_platform(:android)
+
+platform :android do
+
+  lane :firebase_dev do
+    gradle(
+        task: "clean"
+    )
+
+    gradle(
+        task: "assemble",
+        flavor: "dev",
+        flags: '-Ptarget=lib/main_dev.dart',
+        build_type: "Release",
+    )
+
+    firebase_app_distribution(
+      app: {app_id},
+      firebase_cli_token: {firebase_cli_token},
+      apk_path: "../build/app/outputs/flutter-apk/app-dev-release.apk",
+      groups: "group_nexle",
+      debug: true
+    )
+  end
+
+  lane :firebase_uat do
+      gradle(
+          task: "clean"
+      )
+
+      gradle(
+          task: "assemble",
+          flavor: "uat",
+          flags: '-Ptarget=lib/main_uat.dart',
+          build_type: "Release",
+      )
+
+    firebase_app_distribution(
+      app: {app_id},
+      firebase_cli_token: {firebase_cli_token},
+      apk_path: "../build/app/outputs/flutter-apk/app-uat-release.apk",
+      groups: "group_nexle"
+    )
+    end
+end
