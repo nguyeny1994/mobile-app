@@ -27,7 +27,7 @@ jobs:
       - name: Install
         run: |
           cd android
-          ls
+          ls -la
           bundle install
   
       - name: Set up JDK 11
