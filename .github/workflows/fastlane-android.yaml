@@ -39,13 +39,14 @@ jobs:
   
       # - name: CocoaPod Install
       #   run: pod install
-      - name: Install Firebase CLI
+      # - name: Install Firebase CLI
 
-        run: npm install -g firebase-tools
+      #   run: npm install -g firebase-tools
 
       - name: Replacing env
         run: |
-          sed -i '' 's/{app_url}/${{ secrets.FIREBASE_APP_ID }}/g' android/fastlane/Fastfile
+          ls
+          sed -i '' 's/{app_url}/${{ secrets.FIREBASE_APP_ID }}/g' fastlane/Fastfile
           sed -i '' 's/{firebase_cli_token}/${{ secrets.FIREBASE_TOKEN }}/g' android/fastlane/Fastfile
           cat android/fastlane/Fastfile
       - name: Build APK
