@@ -53,7 +53,7 @@ jobs:
         # sed -i '' 's/{firebase_cli_token}/${{ secrets.FIREBASE_TOKEN }}/g' android/fastlane/Fastfile
       - name: Build APK
         run: |
-          chmod +777 -R android
+          chmod -R 777 android
           cd android
           pwd
           bundle exec fastlane android firebase_dev
