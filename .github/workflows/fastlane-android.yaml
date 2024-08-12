@@ -1,0 +1,54 @@
+name: "Fastlane Android CI"
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: "Manual trigger for deploying android"
+        required: true
+        default: "true"
+jobs:
+  build:
+    name: "Build"
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+  
+        uses: actions/checkout@v2
+      - name: Install 
+        run: bundle install
+  
+      - name: Set up JDK 11
+
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt' #AdoptOpenJDK
+          java-version: '11'
+  
+      - name: CocoaPod Install
+        run: pod install
+      - name: Install Firebase CLI
+
+        run: npm install -g firebase-tools
+
+      - name: Replacing env
+        run: |
+          sed -i '' 's/{app_url}/${{ secrets.FIREBASE_APP_ID }}/g' android/fastlane/Fastfile
+          sed -i '' 's/{firebase_cli_token}/${{ secrets.FIREBASE_TOKEN }}/g' android/fastlane/Fastfile
+          cat android/fastlane/Fastfile
+      - name: Build APK
+        run: |
+          cd android
+          fastlane android firebase_dev
+    
+      - name: Upload APK to Firebase App Distribution
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+          --app ${{ secrets.FIREBASE_APP_ID }} \
+          --groups testers
