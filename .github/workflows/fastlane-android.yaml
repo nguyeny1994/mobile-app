@@ -45,8 +45,8 @@ jobs:
 
       - name: Replacing env
         run: |
-          sed -i '' 's/{app_url}/${{ secrets.FIREBASE_APP_ID }}/g' android/fastlane/Fastlane
-          sed -i '' 's|{firebase_cli_token}|${{ secrets.FIREBASE_CLI_TOKEN }}|g' android/fastlane/Fastlane
+          sed -i '' 's/{app_id}/${{ secrets.FIREBASE_APP_ID }}/g' android/fastlane/Fastlane
+          sed -i '' 's~{firebase_cli_token}~${{ secrets.FIREBASE_CLI_TOKEN }}~g' android/fastlane/Fastlane
           cat android/fastlane/Fastlane
         # sed -i '' 's/{firebase_cli_token}/${{ secrets.FIREBASE_TOKEN }}/g' android/fastlane/Fastfile
       - name: Build APK
