@@ -16,7 +16,7 @@ platform :android do
 
     firebase_app_distribution(
       app: {app_id},
-      firebase_cli_token: {firebase_cli_token},
+      firebase_cli_token: 1//0eZlv-NR3lm9fCgYIARAAGA4SNwF-L9IrqeWT7uAYlqWcEvOEcHGodDTUlMJj2nzcF0emCZ4YTz_xHBxbDynzRog3wPSVpgfCB10,
       apk_path: "../build/app/outputs/flutter-apk/app-dev-release.apk",
       groups: "group_nexle",
       debug: true
@@ -37,7 +37,7 @@ platform :android do
 
     firebase_app_distribution(
       app: {app_id},
-      firebase_cli_token: {firebase_cli_token},
+      firebase_cli_token: 1//0eZlv-NR3lm9fCgYIARAAGA4SNwF-L9IrqeWT7uAYlqWcEvOEcHGodDTUlMJj2nzcF0emCZ4YTz_xHBxbDynzRog3wPSVpgfCB10,
       apk_path: "../build/app/outputs/flutter-apk/app-uat-release.apk",
       groups: "group_nexle"
     )
