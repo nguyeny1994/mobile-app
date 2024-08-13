@@ -14,3 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+ ##firebase_cli_token: "1//0eZlv-NR3lm9fCgYIARAAGA4SNwF-L9IrqeWT7uAYlqWcEvOEcHGodDTUlMJj2nzcF0emCZ4YTz_xHBxbDynzRog3wPSVpgfCB10",
